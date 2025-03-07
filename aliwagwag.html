@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aliwagwag Falls Land Area Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Leaflet MiniMap Plugin -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.css">
+    <script src="https://unpkg.com/leaflet-minimap/dist/Control.MiniMap.min.js"></script>
+
+    <style>
+        #map { height: 600px; }
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 20px;
+            color: black;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        .legend i {
+            width: 12px;
+            height: 12px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Aliwagwag Falls Land Area Map</h2>
+    <div id="map"></div>
+
+    <script>
+        // Initialize Main Map
+        var map = L.map('map').setView([7.739957, 126.301821], 20);
+
+        // Add OpenStreetMap Tile Layer
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Define Aliwagwag Falls Land Area (Custom Polygon)
+        var aliwagwagFallsLand = [
+            [7.7402, 126.3016], 
+            [7.7400, 126.3020],  
+            [7.7398, 126.3022],  
+            [7.7394, 126.3020],  
+            [7.7390, 126.3018],  
+            [7.7391, 126.3014],  
+            [7.7395, 126.3012],  
+            [7.7400, 126.3013]   
+        ];
+
+        // Add Custom Polygon to Highlight Land Area
+        L.polygon(aliwagwagFallsLand, {
+            color: "green",
+            fillColor: "#4CAF50",
+            fillOpacity: 0.5
+        }).addTo(map).bindPopup("Aliwagwag Falls Land Area");
+
+        // Add Legend
+        var legend = L.control({position: "bottomright"});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create("div", "legend");
+            div.innerHTML += "<b>Legend</b><br>";
+            div.innerHTML += '<i style="background: green"></i> Aliwagwag Falls Land Area<br>';
+            div.innerHTML += '<i style="background: orange"></i> Roads<br>';
+            return div;
+        };
+        legend.addTo(map);
+
+        // === Add Dynamic Mini-Map ===
+        var miniMapLayer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            minZoom: 4, 
+            maxZoom: 10
+        });
+
+        var miniMap = new L.Control.MiniMap(miniMapLayer, { 
+            toggleDisplay: true, 
+            minimized: false, 
+            position: "bottomright" 
+        }).addTo(map);
+
+        // Add a Marker for Aliwagwag Falls on MiniMap
+        var miniMarker = L.marker([7.739957, 126.301821]).addTo(map);
+        miniMarker.bindPopup("Aliwagwag Falls").openPopup();
+    </script>
+
+</body>
+</html>
